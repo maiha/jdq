@@ -1,0 +1,18 @@
+[
+  {
+    "user_id": "",
+    "start_date": "",
+    "end_date": "",
+    "plan": "default",
+    "quota": "10",
+    "status": "1"
+  },
+  {
+    "user_id": "PROD_001",
+    "start_date": "",
+    "end_date": "",
+    "plan": "premium",
+    "quota": "25",
+    "status": "1"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "user_id": "",
+    "start_date": "",
+    "end_date": "",
+    "status": "default"
+  },
+  {
+    "user_id": "DATE_TEST",
+    "start_date": "20240101",
+    "end_date": "20240331",
+    "status": "q1_2024"
+  },
+  {
+    "user_id": "DATE_TEST",
+    "start_date": "20240401",
+    "end_date": "",
+    "status": "q2_2024_onwards"
+  },
+  {
+    "user_id": "RANGE_TEST",
+    "start_date": "",
+    "end_date": "20240630",
+    "status": "until_h1"
+  }
+]

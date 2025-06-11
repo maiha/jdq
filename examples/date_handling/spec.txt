@@ -1,0 +1,27 @@
+# Date format YYYYMMDD support
+jdq --date 20240215 DATE_TEST data.json
+{"user_id":"DATE_TEST","status":"q1_2024"}
+
+# Date format YYYY-MM-DD support  
+jdq --date 2024-02-15 DATE_TEST data.json
+{"user_id":"DATE_TEST","status":"q1_2024"}
+
+# Date range transition (Q1 to Q2)
+jdq --date 20240331 DATE_TEST data.json
+{"user_id":"DATE_TEST","status":"q1_2024"}
+
+# Date range transition (Q2 starts)
+jdq --date 20240401 DATE_TEST data.json
+{"user_id":"DATE_TEST","status":"q2_2024_onwards"}
+
+# Open-ended date range (end_date empty)
+jdq --date 20241201 DATE_TEST data.json
+{"user_id":"DATE_TEST","status":"q2_2024_onwards"}
+
+# Open-ended date range (start_date empty)
+jdq --date 20240101 RANGE_TEST data.json
+{"user_id":"RANGE_TEST","status":"until_h1"}
+
+# Date outside open range
+jdq --date 20240701 RANGE_TEST data.json
+{"user_id":"RANGE_TEST","status":"default"}
