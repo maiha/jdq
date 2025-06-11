@@ -1,0 +1,30 @@
+[
+  {
+    "user_id": "",
+    "start_date": "",
+    "end_date": "",
+    "plan": "default_plan",
+    "quota": "default_quota",
+    "status": "default_status",
+    "priority": "default_priority"
+  },
+  {
+    "user_id": "INHERIT_TEST",
+    "start_date": "20240101",
+    "end_date": "20240331",
+    "plan": "basic"
+  },
+  {
+    "user_id": "INHERIT_TEST", 
+    "start_date": "20240401",
+    "end_date": "",
+    "plan": "premium_only",
+    "quota": "custom_quota"
+  },
+  {
+    "user_id": "PARTIAL_TEST",
+    "start_date": "",
+    "end_date": "",
+    "priority": "custom_priority"
+  }
+]

@@ -1,0 +1,3 @@
+# Static binary verification - file command should show statically linked
+LANG=C file ../../jdq | grep -q "statically linked" && echo "PASS: statically linked"
+PASS: statically linked

@@ -1,0 +1,26 @@
+[
+  {
+    "region": "asia",
+    "from_date": "",
+    "to_date": "",
+    "account_id": "",
+    "click_limit": "50",
+    "mobile_type": "standard"
+  },
+  {
+    "region": "asia", 
+    "from_date": "20240401",
+    "to_date": "20240531",
+    "account_id": "1001",
+    "click_limit": "100",
+    "mobile_type": "premium"
+  },
+  {
+    "region": "europe",
+    "from_date": "20240501", 
+    "to_date": "20240531",
+    "account_id": "1002",
+    "click_limit": "75",
+    "mobile_type": "basic"
+  }
+]

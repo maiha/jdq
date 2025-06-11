@@ -1,0 +1,26 @@
+[
+  {
+    "user_id": "",
+    "start_date": "",
+    "end_date": "",
+    "quota": "30",
+    "plan": "standard",
+    "status": "1"
+  },
+  {
+    "user_id": "1001",
+    "start_date": "",
+    "end_date": "",
+    "quota": "30",
+    "plan": "premium",
+    "status": "1"
+  },
+  {
+    "user_id": "1002",
+    "start_date": "20240521",
+    "end_date": "20240525",
+    "quota": "30",
+    "plan": "basic",
+    "status": "1"
+  }
+]

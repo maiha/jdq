@@ -1,0 +1,15 @@
+# Real-world usage: extract plan parameter for API calls
+jdq --date 20240522 PROD_001 data.json | jq -r .plan
+premium
+
+# Real-world usage: extract quota parameter for API calls
+jdq --date 20240522 PROD_001 data.json | jq -r .quota
+25
+
+# Real-world usage: extract numeric status parameter for API calls
+jdq --date 20240522 PROD_001 data.json | jq -r .status
+1
+
+# Version check for deployment validation
+jdq --version | head -1 | cut -d' ' -f1
+jdq
