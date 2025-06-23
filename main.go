@@ -105,7 +105,7 @@ func unmarshalRecordFromJSON(data json.RawMessage, r *Record, keyField, startFie
 	// Use original order if available, otherwise sort keys
 	if len(orderedKeys) > 0 {
 		for _, k := range orderedKeys {
-			if k != r.KeyField && k != startField && k != endField {
+			if k != r.KeyField {
 				r.Data[k] = raw[k]
 				r.DataOrder = append(r.DataOrder, k)
 			}
@@ -116,7 +116,7 @@ func unmarshalRecordFromJSON(data json.RawMessage, r *Record, keyField, startFie
 			allKeys = append(allKeys, k)
 		}
 		for _, k := range allKeys {
-			if k != r.KeyField && k != startField && k != endField {
+			if k != r.KeyField {
 				r.Data[k] = raw[k]
 				r.DataOrder = append(r.DataOrder, k)
 			}
@@ -180,7 +180,51 @@ func main() {
 		log.Fatalf("Error parsing JSON: %v", err)
 	}
 
+	// Check if date fields exist
+	if len(records) > 0 {
+		checkDateFields(records, *startField, *endField, jsonFile)
+	}
+
 	queryRecord(records, queryKey, queryDate, *exitStatus)
+}
+
+func checkDateFields(records []Record, startField, endField string, jsonFile string) {
+	if len(records) == 0 {
+		return
+	}
+
+	// We need to check the original JSON to see if the specified date fields exist
+	// We'll re-parse just the first record to validate field existence
+	data, err := os.ReadFile(jsonFile)
+	if err != nil {
+		return // If we can't read the file, skip validation
+	}
+
+	var rawRecords []map[string]interface{}
+	if err := json.Unmarshal(data, &rawRecords); err != nil {
+		return // If we can't parse, skip validation
+	}
+
+	if len(rawRecords) == 0 {
+		return
+	}
+
+	// Check if the specified fields exist in the first record
+	_, startFieldExists := rawRecords[0][startField]
+	_, endFieldExists := rawRecords[0][endField]
+
+	// Build error messages for missing fields
+	var warnings []string
+	if !startFieldExists {
+		warnings = append(warnings, fmt.Sprintf("start date field '%s' not found in data", startField))
+	}
+	if !endFieldExists {
+		warnings = append(warnings, fmt.Sprintf("end date field '%s' not found in data", endField))
+	}
+
+	if len(warnings) > 0 {
+		log.Fatalf("Error: %s\nUse -s/-e to specify correct field names.", strings.Join(warnings, ", "))
+	}
 }
 
 func queryRecord(records []Record, key string, date time.Time, exitOnMissing bool) {

@@ -1,19 +1,19 @@
 # CSS-style inheritance - Q1 period (partial override)
-jdq --date 20240215 INHERIT_TEST data.json
-{"user_id":"INHERIT_TEST","quota":"default_quota","plan":"basic","status":"default_status","priority":"default_priority"}
+jdq -d 20240215 INHERIT_TEST data.json
+{"user_id":"INHERIT_TEST","start_date":"20240101","end_date":"20240331","plan":"basic","quota":"default_quota","status":"default_status","priority":"default_priority"}
 
 # CSS-style inheritance - Q2 period (more overrides)
-jdq --date 20240515 INHERIT_TEST data.json
-{"user_id":"INHERIT_TEST","quota":"custom_quota","plan":"premium_only","status":"default_status","priority":"default_priority"}
+jdq -d 20240515 INHERIT_TEST data.json
+{"user_id":"INHERIT_TEST","start_date":"20240401","end_date":"","plan":"premium_only","quota":"custom_quota","status":"default_status","priority":"default_priority"}
 
 # Partial value override (only priority changed)
-jdq --date 20240522 PARTIAL_TEST data.json
-{"user_id":"PARTIAL_TEST","quota":"default_quota","plan":"default_plan","status":"default_status","priority":"custom_priority"}
+jdq -d 20240522 PARTIAL_TEST data.json
+{"user_id":"PARTIAL_TEST","start_date":"","end_date":"","priority":"custom_priority","plan":"default_plan","quota":"default_quota","status":"default_status"}
 
 # Default fallback for non-existent user
-jdq --date 20240522 NO_SUCH_ACCOUNT data.json
-{"user_id":"NO_SUCH_ACCOUNT","quota":"default_quota","plan":"default_plan","status":"default_status","priority":"default_priority"}
+jdq -d 20240522 NO_SUCH_ACCOUNT data.json
+{"user_id":"NO_SUCH_ACCOUNT","start_date":"","end_date":"","plan":"default_plan","quota":"default_quota","status":"default_status","priority":"default_priority"}
 
 # CSS priority: specific date override beats default
-jdq --date 20240401 INHERIT_TEST data.json
-{"user_id":"INHERIT_TEST","quota":"custom_quota","plan":"premium_only","status":"default_status","priority":"default_priority"}
+jdq -d 20240401 INHERIT_TEST data.json
+{"user_id":"INHERIT_TEST","start_date":"20240401","end_date":"","plan":"premium_only","quota":"custom_quota","status":"default_status","priority":"default_priority"}

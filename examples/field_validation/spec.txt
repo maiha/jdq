@@ -1,0 +1,15 @@
+# Field validation: missing default date fields should always error and exit (no -E needed)
+jdq -d 20250101 1001 data.json 2>&1 | sed 's/^[0-9/]* [0-9:]* //' | head -1
+Error: start date field 'start_date' not found in data, end date field 'end_date' not found in data
+
+# With -E flag: same error behavior
+jdq -E -d 20250101 1001 data.json 2>&1 | sed 's/^[0-9/]* [0-9:]* //' | head -1
+Error: start date field 'start_date' not found in data, end date field 'end_date' not found in data
+
+# Validation: correct custom date field names should work without error
+jdq -s from_date -e to_date -d 20250101 1001 data.json
+{"account_id":"1001","from_date":"","to_date":"20250524","click":"days_14","vimp":"day_1"}
+
+# Validation: non-existent custom date field should error
+jdq -s fake_start -e fake_end -d 20250101 1001 data.json 2>&1 | sed 's/^[0-9/]* [0-9:]* //' | head -1
+Error: start date field 'fake_start' not found in data, end date field 'fake_end' not found in data

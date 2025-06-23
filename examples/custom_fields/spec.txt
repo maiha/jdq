@@ -1,47 +1,47 @@
-# Custom key field (non-first field) with default date fields
-jdq --key-field account_id --date 20240522 1001 data.json
-{"account_id":"1001","to_date":"20240531","click_limit":"100","mobile_type":"premium","region":"asia","from_date":"20240401"}
+# Custom key field (non-first field) with custom date fields
+jdq -k account_id -s from_date -e to_date -d 20240522 1001 data.json
+{"account_id":"1001","region":"asia","from_date":"20240401","to_date":"20240531","click_limit":"100","mobile_type":"premium"}
 
 # Custom key field with non-existent account (should get default)
-jdq --key-field account_id --date 20240522 9999 data.json  
-{"account_id":"9999","mobile_type":"standard","region":"asia","from_date":"","to_date":"","click_limit":"50"}
+jdq -k account_id -s from_date -e to_date -d 20240522 9999 data.json  
+{"account_id":"9999","region":"asia","from_date":"","to_date":"","click_limit":"50","mobile_type":"standard"}
 
 # Custom date fields with default key field (region is first)
-jdq --start-field from_date --end-field to_date --date 20240522 asia data.json
-{"region":"asia","account_id":"1001","click_limit":"100","mobile_type":"premium"}
+jdq -s from_date -e to_date -d 20240522 asia data.json
+{"region":"asia","from_date":"20240401","to_date":"20240531","account_id":"1001","click_limit":"100","mobile_type":"premium"}
 
 # All custom fields - key field is account_id (4th field), date fields are custom
-jdq --key-field account_id --start-field from_date --end-field to_date --date 20240522 1002 data.json
-{"account_id":"1002","click_limit":"75","mobile_type":"basic","region":"europe"}
+jdq -k account_id -s from_date -e to_date -d 20240522 1002 data.json
+{"account_id":"1002","region":"europe","from_date":"20240501","to_date":"20240531","click_limit":"75","mobile_type":"basic"}
 
 # Test with date outside range - should get default
-jdq --key-field account_id --start-field from_date --end-field to_date --date 20240301 1001 data.json
-{"account_id":"1001","click_limit":"50","mobile_type":"standard","region":"asia"}
+jdq -k account_id -s from_date -e to_date -d 20240301 1001 data.json
+{"account_id":"1001","region":"asia","from_date":"","to_date":"","click_limit":"50","mobile_type":"standard"}
 
-# Default behavior (first field as key, standard date fields) - should use region as key
-jdq --date 20240522 asia data.json
+# Default behavior (first field as key, custom date fields) - should use region as key
+jdq -s from_date -e to_date -d 20240522 asia data.json
 {"region":"asia","from_date":"20240401","to_date":"20240531","account_id":"1001","click_limit":"100","mobile_type":"premium"}
 
 # Abnormal case: query account_id without specifying key field (region is used as key)
-jdq --date 20240522 1001 data.json
+jdq -s from_date -e to_date -d 20240522 1001 data.json
 {"region":"1001"}
 
 # Abnormal case: query non-existent region without key field
-jdq --date 20240522 americas data.json
+jdq -s from_date -e to_date -d 20240522 americas data.json
 {"region":"americas"}
 
 # Edge case: specify non-existent key field name
-jdq --key-field nonexistent_field --date 20240522 1001 data.json
-{"nonexistent_field":"1001","mobile_type":"basic","region":"europe","from_date":"20240501","to_date":"20240531","account_id":"1002","click_limit":"75"}
+jdq -k nonexistent_field -s from_date -e to_date -d 20240522 1001 data.json
+{"nonexistent_field":"1001","region":"europe","from_date":"20240501","to_date":"20240531","account_id":"1002","click_limit":"75","mobile_type":"basic"}
 
-# Edge case: specify non-existent date fields
-jdq --start-field fake_start --end-field fake_end --date 20240522 asia data.json
-{"region":"asia","from_date":"20240401","to_date":"20240531","account_id":"1001","click_limit":"100","mobile_type":"premium"}
+# Edge case: specify non-existent date fields (should error)
+jdq -s fake_start -e fake_end -d 20240522 asia data.json 2>&1 | sed 's/^[0-9/]* [0-9:]* //' | head -1
+Error: start date field 'fake_start' not found in data, end date field 'fake_end' not found in data
 
 # Short arguments test: -k -s -e combination
 jdq -k account_id -s from_date -e to_date -d 20240522 1002 data.json
-{"account_id":"1002","click_limit":"75","mobile_type":"basic","region":"europe"}
+{"account_id":"1002","region":"europe","from_date":"20240501","to_date":"20240531","click_limit":"75","mobile_type":"basic"}
 
 # Short vs long arguments (should be identical results)
 jdq -s from_date -e to_date -d 20240522 asia data.json
-{"region":"asia","account_id":"1001","click_limit":"100","mobile_type":"premium"}
+{"region":"asia","from_date":"20240401","to_date":"20240531","account_id":"1001","click_limit":"100","mobile_type":"premium"}

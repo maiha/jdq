@@ -1,15 +1,15 @@
 # Basic user query - exact match
-jdq --date 20240522 1001 data.json
-{"user_id":"1001","quota":"30","plan":"premium","status":"1"}
+jdq -d 20240522 1001 data.json
+{"user_id":"1001","start_date":"","end_date":"","quota":"30","plan":"premium","status":"1"}
 
 # Non-existent user falls back to default
-jdq --date 20240522 9999 data.json
-{"user_id":"9999","quota":"30","plan":"standard","status":"1"}
+jdq -d 20240522 9999 data.json
+{"user_id":"9999","start_date":"","end_date":"","quota":"30","plan":"standard","status":"1"}
 
 # User with date restrictions (within range)
-jdq --date 20240522 1002 data.json
-{"user_id":"1002","quota":"30","plan":"basic","status":"1"}
+jdq -d 20240522 1002 data.json
+{"user_id":"1002","start_date":"20240521","end_date":"20240525","quota":"30","plan":"basic","status":"1"}
 
 # User with date restrictions (outside range)
-jdq --date 20240526 1002 data.json
-{"user_id":"1002","quota":"30","plan":"standard","status":"1"}
+jdq -d 20240526 1002 data.json
+{"user_id":"1002","start_date":"","end_date":"","quota":"30","plan":"standard","status":"1"}

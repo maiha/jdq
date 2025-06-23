@@ -1,0 +1,23 @@
+[
+  {
+    "account_id": "1001",
+    "from_date": "",
+    "to_date": "20250524",
+    "click": "days_14",
+    "vimp": "day_1"
+  },
+  {
+    "account_id": "1001",
+    "from_date": "20250525",
+    "to_date": "",
+    "click": "days_7",
+    "vimp": "day_1"
+  },
+  {
+    "account_id": "",
+    "from_date": "",
+    "to_date": "",
+    "click": "days_30",
+    "vimp": "day_1"
+  }
+]

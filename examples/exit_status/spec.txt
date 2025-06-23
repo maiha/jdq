@@ -1,15 +1,15 @@
 # No default record - query outside date range (returns empty object)
-jdq --date 20240601 1001 data.json
+jdq -d 20240601 1001 data.json
 {"user_id":"1001"}
 
 # No default record - query outside date range with -E (error)
-jdq -E --date 20240601 1001 data.json 2>&1 | head -1
+jdq -E -d 20240601 1001 data.json 2>&1 | head -1
 No record found for key '1001' at date 2024-06-01
 
 # No default record - non-existent user (returns empty object)
-jdq --date 20240515 9999 data.json
+jdq -d 20240515 9999 data.json
 {"user_id":"9999"}
 
 # No default record - non-existent user with -E (error)
-jdq -E --date 20240515 9999 data.json 2>&1 | head -1
+jdq -E -d 20240515 9999 data.json 2>&1 | head -1
 No record found for key '9999' at date 2024-05-15
