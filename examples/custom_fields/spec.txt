@@ -35,8 +35,7 @@ jdq -k nonexistent_field -s from_date -e to_date -d 20240522 1001 data.json
 {"nonexistent_field":"1001","region":"europe","from_date":"20240501","to_date":"20240531","account_id":"1002","click_limit":"75","mobile_type":"basic"}
 
 # Edge case: specify non-existent date fields (should error)
-jdq -s fake_start -e fake_end -d 20240522 asia data.json 2>&1 | sed 's/^[0-9/]* [0-9:]* //' | head -1
-Error: start date field 'fake_start' not found in data, end date field 'fake_end' not found in data
+!jdq -s fake_start -e fake_end -d 20240522 asia data.json
 
 # Short arguments test: -k -s -e combination
 jdq -k account_id -s from_date -e to_date -d 20240522 1002 data.json

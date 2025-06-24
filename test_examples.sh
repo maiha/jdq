@@ -25,6 +25,13 @@ run_test() {
     
     # Change to test directory and add current dir to PATH for clean jdq command
     if output=$(cd "$test_dir" && PATH="../../:$PATH" eval "$cmd" 2>&1); then
+        exit_code=0
+    else
+        exit_code=$?
+    fi
+    
+    # For success cases, compare output
+    if [[ $exit_code -eq 0 ]]; then
         # Try JSON comparison first
         if output_normalized=$(echo "$output" | jq -S . 2>/dev/null) && 
            expected_normalized=$(echo "$expected" | jq -S . 2>/dev/null); then
@@ -56,6 +63,32 @@ run_test() {
     else
         echo -e "${RED}FAIL${NC} (command failed)"
         echo "    Error: $output"
+    fi
+}
+
+# Test function for checking error exit
+run_error_test() {
+    local name="$1"
+    local cmd="$2"
+    local test_dir="$3"
+    
+    TESTS=$((TESTS + 1))
+    echo -n "  Testing: $name ... "
+    
+    # Change to test directory and add current dir to PATH for clean jdq command
+    if output=$(cd "$test_dir" && PATH="../../:$PATH" eval "$cmd" 2>&1); then
+        exit_code=0
+    else
+        exit_code=$?
+    fi
+    
+    # For error tests, we expect non-zero exit code
+    if [[ $exit_code -ne 0 ]]; then
+        echo -e "${GREEN}PASS${NC} (error exit: $exit_code)"
+        PASSED=$((PASSED + 1))
+    else
+        echo -e "${RED}FAIL${NC} (expected error but command succeeded)"
+        echo "    Got output: $output"
     fi
 }
 
@@ -105,6 +138,11 @@ run_category_tests() {
                 # Setup command - execute but don't test output
                 setup_cmd="${BASH_REMATCH[1]}"
                 run_setup "$setup_cmd" "$category_dir"
+            # Check if this is an error test command (starts with !)
+            elif [[ "$cmd_line" =~ ^!(.+) ]]; then
+                # Error test command - expect non-zero exit code
+                error_cmd="${BASH_REMATCH[1]}"
+                run_error_test "$test_name" "$error_cmd" "$category_dir"
             else
                 # Regular test command - read expected output
                 if ! IFS= read -r expected_output; then
@@ -119,6 +157,10 @@ run_category_tests() {
         elif [[ "$line" =~ ^-(.+) ]]; then
             setup_cmd="${BASH_REMATCH[1]}"
             run_setup "$setup_cmd" "$category_dir"
+        # Handle standalone error commands (! prefix)
+        elif [[ "$line" =~ ^!(.+) ]]; then
+            error_cmd="${BASH_REMATCH[1]}"
+            run_error_test "Error test" "$error_cmd" "$category_dir"
         fi
     done < "$test_file"
     
@@ -136,6 +178,14 @@ show_help() {
     echo "Usage: $0 [category...]"
     echo ""
     echo "Run examples for jdq. If no category is specified, run all examples."
+    echo ""
+    echo "Test syntax in spec.txt files:"
+    echo "  # Test name       - Starts a test case"
+    echo "  command           - Command to execute"
+    echo "  expected output   - Expected result"
+    echo ""
+    echo "  ! command         - Error test (expects non-zero exit code)"
+    echo "  - command         - Setup command (output ignored)"
     echo ""
     echo "Available example categories:"
     for dir in examples/*/; do
